@@ -1,14 +1,22 @@
 {
   "name": "mars-rover",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Mars Rover coding challenge solution in JavaScript",
+  "main": "src/rover.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "mars",
+    "rover",
+    "coding-challenge",
+    "javascript"
+  ],
+  "author": "Mohammed Ramadan",
+  "license": "MIT",
   "devDependencies": {
     "jest": "^30.1.3"
   }
