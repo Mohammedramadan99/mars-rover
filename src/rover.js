@@ -1,10 +1,12 @@
 import { TURN_LEFT, TURN_RIGHT, MOVE_VECTOR } from "./directions.js";
 
 class Rover {
-  constructor(x, y, direction) {
+  constructor(x, y, direction, obstacles = []) {
     this.x = x;
     this.y = y;
     this.direction = direction;
+    this.obstacles = new Set(obstacles.map(([ox, oy]) => `${ox},${oy}`));
+    this.stopped = false;
 
     this.commands = {
       F: () => this.move(1),
@@ -16,6 +18,7 @@ class Rover {
 
   executeCommands(commands) {
     for (let cmd of commands) {
+      if (this.stopped) break;
       this.executeCommand(cmd);
     }
     return this.report();
@@ -29,12 +32,21 @@ class Rover {
 
   move(step) {
     const vector = MOVE_VECTOR[this.direction];
-    this.x += vector.x * step;
-    this.y += vector.y * step;
+    const nextX = this.x + vector.x * step;
+    const nextY = this.y + vector.y * step;
+
+    if (this.obstacles.has(`${nextX},${nextY}`)) {
+      this.stopped = true;
+      return;
+    }
+
+    this.x = nextX;
+    this.y = nextY;
   }
 
   report() {
-    return `(${this.x}, ${this.y}) ${this.direction}`;
+    const status = this.stopped ? " STOPPED" : "";
+    return `(${this.x}, ${this.y}) ${this.direction}${status}`;
   }
 }
 

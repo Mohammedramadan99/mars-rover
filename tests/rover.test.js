@@ -53,3 +53,23 @@ describe("Rover Complex Sequences", () => {
     expect(rover.report()).toBe("(1, 1) SOUTH");
   });
 });
+
+describe("Rover with obstacles", () => {
+  test("stops when moving into an obstacle", () => {
+    const rover = new Rover(0, 0, "EAST", [[1, 0]]);
+    rover.executeCommands("F");
+    expect(rover.report()).toBe("(0, 0) EAST STOPPED");
+  });
+
+  test("stops mid-sequence due to obstacle", () => {
+    const rover = new Rover(0, 0, "EAST", [[2, 0]]);
+    rover.executeCommands("FFRFF");
+    expect(rover.report()).toBe("(1, 0) EAST STOPPED");
+  });
+
+  test("ignores obstacles not on path", () => {
+    const rover = new Rover(0, 0, "NORTH", [[1, 0]]);
+    rover.executeCommands("F");
+    expect(rover.report()).toBe("(0, 1) NORTH");
+  });
+});
