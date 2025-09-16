@@ -62,9 +62,22 @@ if (!part) {
     case "part2":
       runPart2(args[0], args[1]);
       break;
-    case "part3":
-      runPart3(parseInt(args[0], 10), parseInt(args[1], 10), args[2]);
+    case "part3": {
+      if (args.length < 2) {
+        console.error("Error: Part3 requires <targetX> and <targetY> arguments.");
+        console.log("Usage: node demo.js part3 <targetX> <targetY> [obstacles]");
+        process.exit(1);
+      }
+      const targetX = parseInt(args[0], 10);
+      const targetY = parseInt(args[1], 10);
+      if (isNaN(targetX) || isNaN(targetY)) {
+        console.error("Error: <targetX> and <targetY> must be numbers.");
+        console.log("Usage: node demo.js part3 <targetX> <targetY> [obstacles]");
+        process.exit(1);
+      }
+      runPart3(targetX, targetY, args[2]);
       break;
+    }
     default:
       console.log("Usage:");
       console.log("  node demo.js part1 <commands>");
