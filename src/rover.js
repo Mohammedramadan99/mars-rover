@@ -9,13 +9,20 @@ class Rover {
     this.stopped = false;
 
     this.commands = {
-      F: () => this.move(1),
-      B: () => this.move(-1),
-      L: () => (this.direction = TURN_LEFT[this.direction]),
-      R: () => (this.direction = TURN_RIGHT[this.direction]),
+      F: (state) => this.simulateMove(state, 1),
+      B: (state) => this.simulateMove(state, -1),
+      L: (state) => ({
+        ...state,
+        direction: TURN_LEFT[state.direction],
+      }),
+      R: (state) => ({
+        ...state,
+        direction: TURN_RIGHT[state.direction],
+      }),
     };
   }
 
+  // --- PART 1 & 2 ---
   executeCommands(commands) {
     for (let cmd of commands) {
       if (this.stopped) break;
@@ -27,26 +34,66 @@ class Rover {
   executeCommand(cmd) {
     const action = this.commands[cmd];
     if (!action) throw new Error(`Invalid command: ${cmd}`);
-    action();
+    const nextState = action(this);
+    this.x = nextState.x;
+    this.y = nextState.y;
+    this.direction = nextState.direction;
+    if (nextState.stopped) this.stopped = true;
   }
 
-  move(step) {
-    const vector = MOVE_VECTOR[this.direction];
-    const nextX = this.x + vector.x * step;
-    const nextY = this.y + vector.y * step;
+  simulateMove(state, step) {
+    const vector = MOVE_VECTOR[state.direction];
+    const nextX = state.x + vector.x * step;
+    const nextY = state.y + vector.y * step;
 
     if (this.obstacles.has(`${nextX},${nextY}`)) {
-      this.stopped = true;
-      return;
+      return { ...state, stopped: true };
     }
 
-    this.x = nextX;
-    this.y = nextY;
+    return { ...state, x: nextX, y: nextY };
   }
 
   report() {
     const status = this.stopped ? " STOPPED" : "";
     return `(${this.x}, ${this.y}) ${this.direction}${status}`;
+  }
+
+  // --- PART 3: PATHFINDING ---
+  findPathTo(targetX, targetY) {
+    const startState = {
+      x: this.x,
+      y: this.y,
+      direction: this.direction,
+      stopped: false,
+    };
+
+    const queue = [{ state: startState, path: "" }];
+    const visited = new Set([this.hashState(startState)]);
+    // console.log({queue,visited})
+    while (queue.length > 0) {
+      const { state, path } = queue.shift();
+
+      if (state.x === targetX && state.y === targetY && !state.stopped) {
+        return path;
+      }
+
+      for (let cmd of Object.keys(this.commands)) {
+        const nextState = this.commands[cmd](state);
+        if (nextState.stopped) continue;
+
+        const key = this.hashState(nextState);
+        if (!visited.has(key)) {
+          visited.add(key);
+          queue.push({ state: nextState, path: path + cmd });
+        }
+      }
+    }
+
+    return null;
+  }
+
+  hashState(state) {
+    return `${state.x},${state.y},${state.direction}`;
   }
 }
 
