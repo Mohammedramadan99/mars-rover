@@ -2,11 +2,12 @@
   "name": "mars-rover",
   "version": "1.0.0",
   "description": "Mars Rover coding challenge solution in JavaScript",
-  "main": "src/rover.js",
+  "main": "demo.js",
   "type": "module",
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
+    "demo":"node demo.js",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

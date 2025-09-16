@@ -1,0 +1,76 @@
+import Rover from "./src/rover.js";
+
+const [, , part, ...args] = process.argv;
+
+const defaultObstacles = [
+  [1, 4],
+  [3, 5],
+  [7, 4],
+];
+
+function parseObstacles(input) {
+  if (!input) return defaultObstacles;
+  try {
+    return JSON.parse(input);
+  } catch {
+    console.error("Invalid obstacles format. Use JSON, e.g. '[[1,4],[3,5]]'");
+    process.exit(1);
+  }
+}
+
+function normalizeCommands(cmd = "") {
+  return cmd.toUpperCase();
+}
+
+function runPart1(commands = "FFRFF") {
+  console.log("=== Part I – Basic Movement ===");
+  const rover = new Rover(0, 0, "NORTH");
+  console.log("Start:", rover.report());
+  rover.executeCommands(normalizeCommands(commands));
+  console.log(`After commands "${commands}":`, rover.report());
+  console.log();
+}
+
+function runPart2(commands = "FFFFF", obstacles) {
+  console.log("=== Part II – Obstacles ===");
+  obstacles = parseObstacles(obstacles);
+  const rover = new Rover(0, 0, "NORTH", obstacles);
+  console.log("Start:", rover.report());
+  rover.executeCommands(normalizeCommands(commands));
+  console.log(`After commands "${commands}":`, rover.report());
+  console.log();
+}
+
+function runPart3(targetX = 8, targetY = 5, obstacles) {
+  console.log("=== Part III – Pathfinding ===");
+  obstacles = parseObstacles(obstacles);
+  const rover = new Rover(0, 0, "NORTH", obstacles);
+  const path = rover.findPathTo(targetX, targetY);
+  console.log(`Find path to (${targetX}, ${targetY}):`, path);
+  console.log();
+}
+
+if (!part) {
+  runPart1();
+  runPart2();
+  runPart3();
+} else {
+  switch (part.toLowerCase()) {
+    case "part1":
+      runPart1(args[0]);
+      break;
+    case "part2":
+      runPart2(args[0], args[1]);
+      break;
+    case "part3":
+      runPart3(parseInt(args[0], 10), parseInt(args[1], 10), args[2]);
+      break;
+    default:
+      console.log("Usage:");
+      console.log("  node demo.js part1 <commands>");
+      console.log("  node demo.js part2 <commands> [obstacles]");
+      console.log("  node demo.js part3 <targetX> <targetY> [obstacles]");
+      console.log("Or run without arguments to execute all parts with default values.");
+      break;
+  }
+}
