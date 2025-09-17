@@ -2,12 +2,15 @@ import Rover from "./src/rover.js";
 
 const [, , part, ...args] = process.argv;
 
+// === Configurable defaults ===
+const defaultStart = { x: 0, y: 0, dir: "NORTH" };
 const defaultObstacles = [
   [1, 4],
   [3, 5],
   [7, 4],
 ];
 
+// === Helpers ===
 function parseObstacles(input) {
   if (!input) return defaultObstacles;
   try {
@@ -28,9 +31,10 @@ function validateCommands(cmd = "") {
   return cmd.toUpperCase();
 }
 
+// === Parts ===
 function runPart1(commands = "FFRFF") {
   console.log("=== Part I – Basic Movement ===");
-  const rover = new Rover(0, 0, "NORTH");
+  const rover = new Rover(defaultStart.x, defaultStart.y, defaultStart.dir);
   console.log("Start:", rover.report(), "Obstacles: none");
   rover.executeCommands(validateCommands(commands));
   console.log(`After commands "${commands}":`, rover.report());
@@ -40,7 +44,7 @@ function runPart1(commands = "FFRFF") {
 function runPart2(commands = "FFFFF", obstacles) {
   console.log("=== Part II – Obstacles ===");
   obstacles = parseObstacles(obstacles);
-  const rover = new Rover(0, 0, "NORTH", obstacles);
+  const rover = new Rover(defaultStart.x, defaultStart.y, defaultStart.dir, obstacles);
   console.log("Start:", rover.report(), "Obstacles:", JSON.stringify(obstacles));
   rover.executeCommands(validateCommands(commands));
   console.log(`After commands "${commands}":`, rover.report());
@@ -50,13 +54,14 @@ function runPart2(commands = "FFFFF", obstacles) {
 function runPart3(targetX = 8, targetY = 5, obstacles) {
   console.log("=== Part III – Pathfinding ===");
   obstacles = parseObstacles(obstacles);
-  const rover = new Rover(0, 0, "NORTH", obstacles);
+  const rover = new Rover(defaultStart.x, defaultStart.y, defaultStart.dir, obstacles);
   console.log("Start:", rover.report(), "Obstacles:", JSON.stringify(obstacles));
   const path = rover.findPathTo(targetX, targetY);
   console.log(`Find path to (${targetX}, ${targetY}):`, path);
   console.log();
 }
 
+// === Entrypoint ===
 if (!part) {
   runPart1();
   runPart2();
