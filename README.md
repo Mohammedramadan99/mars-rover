@@ -140,6 +140,26 @@ It will execute all three parts with default values:
 
 ---
 
+## Changing the Start Point
+
+By default, the rover starts at `(0, 0)` facing **NORTH**.
+You can easily change the starting position and direction by editing one constant in `demo.js`:
+
+```js
+// demo.js
+const defaultStart = { x: 0, y: 0, dir: "NORTH" };
+```
+
+For example, to start the rover at `(4, 2)` facing **EAST**, update it as:
+
+```js
+const defaultStart = { x: 4, y: 2, dir: "EAST" };
+```
+
+This change will automatically apply to **all parts** of the demo (movement, obstacles, pathfinding).
+
+---
+
 ## Testing
 
 This project includes automated tests written with **Jest**.
