@@ -57,6 +57,10 @@ describe("Part II – Obstacles", () => {
     const rover = new Rover(0, 0, "EAST", [[5, 5]]);
     expect(rover.executeCommands("F")).toBe("(1, 0) EAST");
   });
+  test("stops when moving backward into obstacle", () => {
+    const rover = new Rover(0, 0, "NORTH", [[0, -1]]);
+    expect(rover.executeCommands("B")).toBe("(0, 0) NORTH STOPPED");
+  });
 });
 
 describe("Part III – Pathfinding", () => {
@@ -82,5 +86,25 @@ describe("Part III – Pathfinding", () => {
     const path = rover.findPathTo(3, 0);
     expect(path).not.toBeNull();
     expect(rover.executeCommands(path).startsWith("(3, 0)")).toBe(true);
+  });
+  test("returns null if target is unreachable", () => {
+    const rover = new Rover(0, 0, "NORTH", [
+      [0, 1],
+      [1, 0],
+      [0, -1],
+      [-1, 0],
+    ]);
+    expect(rover.findPathTo(2, 2)).toBeNull();
+  });
+
+  test("navigates around diagonal wall of obstacles", () => {
+    const rover = new Rover(0, 0, "EAST", [
+      [1, 1],
+      [2, 2],
+      [3, 3],
+    ]);
+    const path = rover.findPathTo(4, 0);
+    expect(path).not.toBeNull();
+    expect(rover.executeCommands(path).startsWith("(4, 0)")).toBe(true);
   });
 });
