@@ -7,9 +7,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "demo":"node demo.js",
-    "lint": "eslint .",
-    "format": "prettier --write ."
+    "demo":"node demo.js"
   },
   "keywords": [
     "mars",
