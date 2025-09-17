@@ -59,7 +59,7 @@ class Rover {
   }
 
   // --- PART 3: PATHFINDING ---
-  findPathTo(targetX, targetY) {
+  findPathTo(targetX, targetY, maxSteps = 200) {
     const startState = {
       x: this.x,
       y: this.y,
@@ -69,8 +69,12 @@ class Rover {
 
     const queue = [{ state: startState, path: "" }];
     const visited = new Set([this.hashState(startState)]);
+
     while (queue.length > 0) {
       const { state, path } = queue.shift();
+
+      // stop if path is too long
+      if (path.length > maxSteps) continue;
 
       if (state.x === targetX && state.y === targetY && !state.stopped) {
         return path;
