@@ -18,15 +18,21 @@ function parseObstacles(input) {
   }
 }
 
-function normalizeCommands(cmd = "") {
+function validateCommands(cmd = "") {
+  const validChars = /^[FBLR]*$/i;
+  if (!validChars.test(cmd)) {
+    console.error(`Invalid commands: "${cmd}".`);
+    console.log("Commands must only contain: F (forward), B (backward), L (turn left), R (turn right).");
+    process.exit(1);
+  }
   return cmd.toUpperCase();
 }
 
 function runPart1(commands = "FFRFF") {
   console.log("=== Part I – Basic Movement ===");
   const rover = new Rover(0, 0, "NORTH");
-  console.log("Start:", rover.report());
-  rover.executeCommands(normalizeCommands(commands));
+  console.log("Start:", rover.report(), "Obstacles: none");
+  rover.executeCommands(validateCommands(commands));
   console.log(`After commands "${commands}":`, rover.report());
   console.log();
 }
@@ -35,8 +41,8 @@ function runPart2(commands = "FFFFF", obstacles) {
   console.log("=== Part II – Obstacles ===");
   obstacles = parseObstacles(obstacles);
   const rover = new Rover(0, 0, "NORTH", obstacles);
-  console.log("Start:", rover.report());
-  rover.executeCommands(normalizeCommands(commands));
+  console.log("Start:", rover.report(), "Obstacles:", JSON.stringify(obstacles));
+  rover.executeCommands(validateCommands(commands));
   console.log(`After commands "${commands}":`, rover.report());
   console.log();
 }
@@ -45,6 +51,7 @@ function runPart3(targetX = 8, targetY = 5, obstacles) {
   console.log("=== Part III – Pathfinding ===");
   obstacles = parseObstacles(obstacles);
   const rover = new Rover(0, 0, "NORTH", obstacles);
+  console.log("Start:", rover.report(), "Obstacles:", JSON.stringify(obstacles));
   const path = rover.findPathTo(targetX, targetY);
   console.log(`Find path to (${targetX}, ${targetY}):`, path);
   console.log();
