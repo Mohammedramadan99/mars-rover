@@ -69,7 +69,6 @@ class Rover {
 
     const queue = [{ state: startState, path: "" }];
     const visited = new Set([this.hashState(startState)]);
-    // console.log({queue,visited})
     while (queue.length > 0) {
       const { state, path } = queue.shift();
 

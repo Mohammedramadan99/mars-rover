@@ -8,6 +8,15 @@ This project implements a Mars Rover simulation in JavaScript. The rover can mov
 
 ---
 
+## Requirements
+
+To run this project you need:
+
+- [Node.js](https://nodejs.org/) (version 18 or higher recommended)
+- npm (comes bundled with Node.js)
+
+---
+
 ## Installation
 
 Clone the repository and install dependencies:
@@ -16,7 +25,7 @@ Clone the repository and install dependencies:
 git clone https://github.com/Mohammedramadan99/mars-rover.git
 cd mars-rover
 npm install
-```
+````
 
 ---
 
